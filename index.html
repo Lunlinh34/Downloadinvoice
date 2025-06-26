@@ -1,0 +1,200 @@
+    <!DOCTYPE html>
+    <html lang="vi">
+    <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tra cứu hóa đơn điện tử | meinvoice.vn</title>
+    <style>
+        body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: #f4f6f9;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        }
+
+        .container {
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 500px;
+        text-align: center;
+        }
+
+        h1 {
+        margin-bottom: 20px;
+        font-size: 24px;
+        color: #333;
+        }
+
+        input[type="text"] {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 16px;
+        font-size: 16px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        outline: none;
+        transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus {
+        border-color: #007bff;
+        }
+
+        button {
+        background-color: #007bff;
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        }
+
+        button:hover {
+        background-color: #0056b3;
+        }
+
+        pre#output {
+        margin-top: 20px;
+        background: #f1f1f1;
+        padding: 15px;
+        border-radius: 8px;
+        text-align: left;
+        max-height: 300px;
+        overflow-y: auto;
+        white-space: pre-wrap;
+        font-size: 14px;
+        color: #333;
+        
+        }
+        #pdfList {
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+  text-align: left;
+}
+
+#pdfList li {
+  padding: 8px 12px;
+  margin-bottom: 6px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  transition: background-color 0.2s;
+}
+
+#pdfList li:hover {
+  background-color: #e9f2ff;
+}
+
+#pdfList li a {
+  text-decoration: none;
+  color: #007bff;
+  margin-left: 8px;
+  word-break: break-all;
+}
+
+.pdf-icon {
+  font-size: 18px;
+  color: #d9534f;
+}
+    </style>
+    </head>
+    <body>
+    <div class="container">
+        <h1>Tra cứu & Tải hóa đơn điện tử</h1>
+        <input id="invoiceCode" type="text" placeholder="Nhập mã tra cứu hóa đơn" />
+        <button onclick="downloadInvoice()">Tải hóa đơn</button>
+        <pre id="output">Kết quả sẽ hiển thị ở đây...</pre>
+        <h3>📂 Danh sách file PDF:</h3>
+        <ul id="pdfList"></ul>
+
+    </div>
+
+    <script>
+        async function downloadInvoice() {
+        const code = document.getElementById('invoiceCode').value.trim();
+        const output = document.getElementById('output');
+        
+        if (!code) {
+            alert("Vui lòng nhập mã tra cứu");
+            return;
+        }
+
+        output.textContent = "Đang gửi yêu cầu...";
+
+        try {
+            const res = await fetch('http://127.0.0.1:5000/api/download_invoice', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ invoice_code: code })
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+            output.textContent = "✅ Thành công!\n\n" + data.robot_log;
+            } else {
+            output.textContent = "❌ Lỗi: " + data.message + "\n\n" + (data.robot_error || "");
+            }
+        } catch (err) {
+            output.textContent = "❌ Lỗi kết nối đến server.";
+        }
+        }
+       async function loadPDFList() {
+            const list = document.getElementById('pdfList');
+            list.innerHTML = "Đang tải danh sách file...";
+
+            try {
+                const res = await fetch('http://127.0.0.1:5000/api/list_pdfs');
+                const data = await res.json();
+
+                if (res.ok && data.status === "success") {
+                if (data.files.length === 0) {
+                    list.innerHTML = "<li>Không có file PDF nào.</li>";
+                    return;
+                }
+                list.innerHTML = "";
+                data.files.forEach(file => {
+                    const li = document.createElement("li");
+
+                    const icon = document.createElement("span");
+                    icon.className = "pdf-icon";
+                    icon.textContent = "📄";
+
+                    const link = document.createElement("a");
+                    link.href = `http://127.0.0.1:5000/api/download_pdf/${encodeURIComponent(file)}`;
+                    link.target = "_blank";
+                    link.textContent = file;
+
+                    li.appendChild(icon);
+                    li.appendChild(link);
+                    list.appendChild(li);
+                });
+                } else {
+                list.innerHTML = "<li>Lỗi khi lấy danh sách file: " + data.message + "</li>";
+                }
+            } catch (err) {
+                list.innerHTML = "<li>Không kết nối được đến server.</li>";
+            }
+            }
+
+        // Gọi khi trang load
+        window.onload = () => {
+        loadPDFList();
+        };
+
+    </script>
+    </body>
+    </html>

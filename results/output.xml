@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.2.2 (Python 3.13.2 on win32)" generated="2025-06-24T01:28:48.454308" rpa="false" schemaversion="5">
+<suite id="s1" name="InvoiceRPA" source="D:\InvoiceRPA">
+<suite id="s1-s1" name="InvoiceDownload" source="D:\InvoiceRPA\InvoiceDownload.robot">
+<test id="s1-s1-t1" name="Tải Hóa Đơn Điện Tử" line="61">
+<kw name="Open Meinvoice Tra Cuu Page">
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-06-24T01:28:50.879802" level="INFO">${prefs} = {'download.default_directory': 'invoice.pdf', 'download.prompt_for_download': 'False', 'plugins.always_open_pdf_externally': 'True'}</msg>
+<var>${prefs}</var>
+<arg>download.default_directory=${DOWNLOAD_DIR}</arg>
+<arg>download.prompt_for_download=False</arg>
+<arg>plugins.always_open_pdf_externally=True</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-06-24T01:28:50.878662" elapsed="0.001429"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-06-24T01:28:50.882939" level="INFO">${options} = &lt;selenium.webdriver.chrome.options.Options object at 0x000001767F98B230&gt;</msg>
+<var>${options}</var>
+<arg>sys.modules['selenium.webdriver'].ChromeOptions()</arg>
+<arg>sys, selenium.webdriver</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-06-24T01:28:50.880637" elapsed="0.002657"/>
+</kw>
+<kw name="Call Method" owner="BuiltIn">
+<arg>${options}</arg>
+<arg>add_experimental_option</arg>
+<arg>prefs</arg>
+<arg>${prefs}</arg>
+<doc>Calls the named method of the given object with the provided arguments.</doc>
+<status status="PASS" start="2025-06-24T01:28:50.883792" elapsed="0.000955"/>
+</kw>
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2025-06-24T01:28:50.886617" level="INFO">Opening browser 'chrome' to base url 'https://www.meinvoice.vn/tra-cuu'.</msg>
+<arg>${URL}</arg>
+<arg>chrome</arg>
+<arg>options=${options}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2025-06-24T01:28:50.885445" elapsed="6.808224"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2025-06-24T01:28:57.694272" elapsed="0.163359"/>
+</kw>
+<kw name="Wait Until Page Contains Element" owner="SeleniumLibrary">
+<arg>id=txtCode</arg>
+<arg>timeout=15s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" start="2025-06-24T01:28:57.858092" elapsed="0.061182"/>
+</kw>
+<status status="PASS" start="2025-06-24T01:28:50.877072" elapsed="7.042480"/>
+</kw>
+<kw name="Input Invoice Code">
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2025-06-24T01:28:57.921585" level="INFO">Typing text 'B1HEIRR8N0WP' into text field 'id=txtCode'.</msg>
+<arg>id=txtCode</arg>
+<arg>${code}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2025-06-24T01:28:57.921051" elapsed="0.156587"/>
+</kw>
+<arg>${INVOICE_CODE}</arg>
+<status status="PASS" start="2025-06-24T01:28:57.920213" elapsed="0.157706"/>
+</kw>
+<kw name="Click Search Button">
+<kw name="Click Button" owner="SeleniumLibrary">
+<msg time="2025-06-24T01:28:58.080413" level="INFO">Clicking button 'id=btnSearchInvoice'.</msg>
+<arg>id=btnSearchInvoice</arg>
+<doc>Clicks the button identified by ``locator``.</doc>
+<status status="PASS" start="2025-06-24T01:28:58.079445" elapsed="0.535436"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2025-06-24T01:29:01.616254" level="INFO">Slept 3 seconds.</msg>
+<arg>3s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2025-06-24T01:28:58.615391" elapsed="3.001566"/>
+</kw>
+<status status="PASS" start="2025-06-24T01:28:58.078402" elapsed="3.539080"/>
+</kw>
+<kw name="Check Invoice Found">
+<kw name="Run Keyword And Return Status" owner="BuiltIn">
+<kw name="Page Should Contain" owner="SeleniumLibrary">
+<msg time="2025-06-24T01:29:02.227413" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-1.png"&gt;&lt;img src="selenium-screenshot-1.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg time="2025-06-24T01:29:02.228294" level="FAIL">Page should have contained text 'không tìm thấy hóa đơn' but did not.</msg>
+<arg>không tìm thấy hóa đơn</arg>
+<doc>Verifies that current page contains ``text``.</doc>
+<status status="FAIL" start="2025-06-24T01:29:01.621772" elapsed="0.707701">Page should have contained text 'không tìm thấy hóa đơn' but did not.</status>
+</kw>
+<msg time="2025-06-24T01:29:02.330168" level="INFO">${not_found} = False</msg>
+<var>${not_found}</var>
+<arg>Page Should Contain</arg>
+<arg>không tìm thấy hóa đơn</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<status status="PASS" start="2025-06-24T01:29:01.620963" elapsed="0.709762"/>
+</kw>
+<kw name="Run Keyword If" owner="BuiltIn">
+<arg>${not_found}</arg>
+<arg>Log</arg>
+<arg>Không tìm thấy hóa đơn với mã ${INVOICE_CODE}</arg>
+<arg>WARN</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" start="2025-06-24T01:29:02.331293" elapsed="0.000987"/>
+</kw>
+<kw name="Run Keyword If" owner="BuiltIn">
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-06-24T01:29:02.334750" level="INFO">Tìm thấy hóa đơn, chuẩn bị tải xuống</msg>
+<arg>Tìm thấy hóa đơn, chuẩn bị tải xuống</arg>
+<arg>INFO</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-06-24T01:29:02.334023" elapsed="0.001367"/>
+</kw>
+<arg>not ${not_found}</arg>
+<arg>Log</arg>
+<arg>Tìm thấy hóa đơn, chuẩn bị tải xuống</arg>
+<arg>INFO</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" start="2025-06-24T01:29:02.332815" elapsed="0.003048"/>
+</kw>
+<return>
+<value>not ${not_found}</value>
+<status status="PASS" start="2025-06-24T01:29:02.336229" elapsed="0.000607"/>
+</return>
+<msg time="2025-06-24T01:29:02.337497" level="INFO">${found} = not False</msg>
+<var>${found}</var>
+<status status="PASS" start="2025-06-24T01:29:01.619933" elapsed="0.718058"/>
+</kw>
+<kw name="Run Keyword If" owner="BuiltIn">
+<kw name="Click Print Invoice Button">
+<kw name="Remove Overlay If Present">
+<kw name="Run Keyword And Return Status" owner="BuiltIn">
+<kw name="Element Should Be Visible" owner="SeleniumLibrary">
+<msg time="2025-06-24T01:29:02.502681" level="INFO">Element 'xpath=//div[contains(@class,'ui-widget-overlay')]' is displayed.</msg>
+<arg>xpath=//div[contains(@class,'ui-widget-overlay')]</arg>
+<doc>Verifies that the element identified by ``locator`` is visible.</doc>
+<status status="PASS" start="2025-06-24T01:29:02.345834" elapsed="0.157145"/>
+</kw>
+<msg time="2025-06-24T01:29:02.503260" level="INFO">${overlay_present} = True</msg>
+<var>${overlay_present}</var>
+<arg>Element Should Be Visible</arg>
+<arg>xpath=//div[contains(@class,'ui-widget-overlay')]</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<status status="PASS" start="2025-06-24T01:29:02.344818" elapsed="0.158755"/>
+</kw>
+<kw name="Run Keyword If" owner="BuiltIn">
+<kw name="Execute Javascript" owner="SeleniumLibrary">
+<msg time="2025-06-24T01:29:02.505998" level="INFO">Executing JavaScript:
+document.querySelector('div.ui-widget-overlay').style.display='none'
+Without any arguments.</msg>
+<arg>document.querySelector('div.ui-widget-overlay').style.display='none'</arg>
+<doc>Executes the given JavaScript code with possible arguments.</doc>
+<status status="PASS" start="2025-06-24T01:29:02.504676" elapsed="0.023887"/>
+</kw>
+<arg>${overlay_present}</arg>
+<arg>Execute JavaScript</arg>
+<arg>document.querySelector('div.ui-widget-overlay').style.display='none'</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" start="2025-06-24T01:29:02.503891" elapsed="0.025102"/>
+</kw>
+<status status="PASS" start="2025-06-24T01:29:02.343247" elapsed="0.186338"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>id=print-ticket</arg>
+<arg>timeout=10s</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2025-06-24T01:29:02.530079" elapsed="0.026306"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2025-06-24T01:29:02.557689" level="INFO">Clicking element 'id=print-ticket'.</msg>
+<arg>id=print-ticket</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2025-06-24T01:29:02.556918" elapsed="0.120344"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2025-06-24T01:29:04.680107" level="INFO">Slept 2 seconds.</msg>
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2025-06-24T01:29:02.677828" elapsed="2.002642"/>
+</kw>
+<kw name="Click Print Button With PyAutoGui">
+<kw name="Click Print Button" owner="auto_save_pdf">
+<arg>${image_path}</arg>
+<arg>save_dir=${save_dir}</arg>
+<arg>filename=${filename}</arg>
+<arg>address_bar_coords=(${address_x},${address_y})</arg>
+<doc>Click nút print bằng hình ảnh, sau đó thao tác popup Save As để lưu file.</doc>
+<status status="PASS" start="2025-06-24T01:29:04.681702" elapsed="6.798236"/>
+</kw>
+<arg>${PRINT_BUTTON_IMAGE}</arg>
+<arg>${DOWNLOAD_DIR}</arg>
+<arg>${FILENAME}</arg>
+<arg>${ADDRESS_BAR_X}</arg>
+<arg>${ADDRESS_BAR_Y}</arg>
+<status status="PASS" start="2025-06-24T01:29:04.680806" elapsed="6.799459"/>
+</kw>
+<status status="PASS" start="2025-06-24T01:29:02.342257" elapsed="9.138201"/>
+</kw>
+<arg>${found}</arg>
+<arg>Click Print Invoice Button</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" start="2025-06-24T01:29:02.341072" elapsed="9.139618"/>
+</kw>
+<kw name="Close Meinvoice Browser">
+<kw name="Close Browser" owner="SeleniumLibrary">
+<doc>Closes the current browser.</doc>
+<status status="PASS" start="2025-06-24T01:29:11.482001" elapsed="2.409664"/>
+</kw>
+<status status="PASS" start="2025-06-24T01:29:11.481337" elapsed="2.410750"/>
+</kw>
+<status status="PASS" start="2025-06-24T01:28:50.872815" elapsed="23.019860"/>
+</test>
+<status status="PASS" start="2025-06-24T01:28:48.565717" elapsed="25.331082"/>
+</suite>
+<status status="PASS" start="2025-06-24T01:28:48.467203" elapsed="25.444925"/>
+</suite>
+<statistics>
+<total>
+<stat pass="1" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="InvoiceRPA" id="s1" pass="1" fail="0" skip="0">InvoiceRPA</stat>
+<stat name="InvoiceDownload" id="s1-s1" pass="1" fail="0" skip="0">InvoiceRPA.InvoiceDownload</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
